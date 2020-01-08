@@ -23,9 +23,6 @@ namespace MultiAgentSystem.Model
         /// </summary>
         public double Draft { get; set; }
 
-        protected override void Reflection()
-        {
-
-        }
+        
     }
 }

@@ -8,6 +8,9 @@ namespace MultiAgentSystem.Model
 {
     public class Agent
     {
+
+       
+
         /// <summary>
         /// Время нахождения в ячейке
         /// </summary>
@@ -19,10 +22,9 @@ namespace MultiAgentSystem.Model
         public Position Location { get; set; }
 
 
-        protected virtual void Reflection()
-        {
 
-        }
 
+
+       
     }
 }
