@@ -20,24 +20,25 @@ namespace MultiAgentSystem.Views
         /// Создание сетки
         /// </summary>
         /// <returns></returns>
-        private Grid CreateGrid()
+        private StackPanel CreateGrid()
         {
+            var stackPanel = new StackPanel();
             var grid = new Grid
             {
-                Width = 750,
-                Height = 750,
-                HorizontalAlignment = HorizontalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 ShowGridLines = true
             };
 
             for (int i = 0; i <= 15; i++)
             {
-                grid.ColumnDefinitions.Add(new ColumnDefinition());
-                grid.RowDefinitions.Add(new RowDefinition());
+                grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(30)});
+                grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(30)});
             }
 
-            return grid;
+            stackPanel.Children.Add(grid);
+            stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
+            return stackPanel;
         }
 
     }
