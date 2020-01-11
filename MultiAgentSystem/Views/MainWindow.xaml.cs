@@ -9,18 +9,20 @@ namespace MultiAgentSystem.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MapsAgentViewModel _viewModel = new MapsAgentViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MapsAgentViewModel();
-            Content = CreateGrid();
+            DataContext = _viewModel;
+            Map.Content = CreateGrid();
         }
 
         /// <summary>
         /// Создание сетки
         /// </summary>
         /// <returns></returns>
-        private StackPanel CreateGrid()
+        private StackPanel CreateGrid(int gridX = 15, int size = 30)
         {
             var stackPanel = new StackPanel();
             var grid = new Grid
@@ -30,10 +32,10 @@ namespace MultiAgentSystem.Views
                 ShowGridLines = true
             };
 
-            for (int i = 0; i <= 15; i++)
+            for (int i = 0; i <= gridX; i++)
             {
-                grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(30)});
-                grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(30)});
+                grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(size)});
+                grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(size)});
             }
 
             stackPanel.Children.Add(grid);
@@ -41,5 +43,9 @@ namespace MultiAgentSystem.Views
             return stackPanel;
         }
 
+        private void Apply_Clicked(object sender, RoutedEventArgs e)
+        {
+            Map.Content = CreateGrid(_viewModel.GridX, _viewModel.Size);
+        }
     }
 }
