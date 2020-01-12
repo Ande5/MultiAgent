@@ -1,8 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using MultiAgentSystem.Model;
 using MultiAgentSystem.ViewModels;
 
 namespace MultiAgentSystem.Views
@@ -18,14 +16,10 @@ namespace MultiAgentSystem.Views
         {
             InitializeComponent();
             DataContext = _viewModel;
-            Map.Content = CreateGrid();
+            Map.Content = LoadGrid();
         }
 
-        /// <summary>
-        /// Создание сетки
-        /// </summary>
-        /// <returns></returns>
-        private StackPanel CreateGrid(int gridX = 15, int size = 30)
+        private StackPanel LoadGrid(int size = 60)
         {
             var stackPanel = new StackPanel();
             var grid = new Grid
@@ -35,22 +29,38 @@ namespace MultiAgentSystem.Views
                 ShowGridLines = true
             };
 
-            for (int i = 0; i <= gridX; i++)
+            for (int k=0; k < _viewModel.MapDepths.GetLength(0); k++)
             {
-                grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(size)});
-                grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(size)});
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(size) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(size) });
 
-                //TODO Тест
-                int blueDegree = 255 - (int)(255 * 50 / 100 * 0.66);
-                var stack = new StackPanel
+                for (int z = 0; z < _viewModel.MapDepths.GetLength(1); z++)
                 {
-                    Background = new SolidColorBrush(Color.FromRgb(70,70,(byte)blueDegree))
-                };
-                Grid.SetRow(stack, i);
-                Grid.SetColumn(stack, 3);
-                grid.Children.Add(stack);
+                    int blueDegree, greenDegree = 50, redDegree = 0;
+
+                    if (_viewModel.MapDepths[k,z] < 0)
+                    {
+                        greenDegree = 105;
+                        redDegree = 115;
+                        blueDegree = 0;
+                    }
+                    else
+                    {
+                        blueDegree = 255 - (int)(255 * _viewModel.MapDepths[k, z] / 100 * 0.55);
+                    }
+
+                    var stack = new StackPanel
+                    {
+                        Background =
+                            new SolidColorBrush(Color.FromRgb((byte) redDegree, (byte) greenDegree, (byte) blueDegree))
+                    };
+
+                    Grid.SetRow(stack, k);
+                    Grid.SetColumn(stack, z); 
+                    grid.Children.Add(stack);
+                }
             }
-           
+
             stackPanel.Children.Add(grid);
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
             return stackPanel;
@@ -58,7 +68,7 @@ namespace MultiAgentSystem.Views
 
         private void Apply_Clicked(object sender, RoutedEventArgs e)
         {
-            Map.Content = CreateGrid(_viewModel.GridX, _viewModel.Size);
+            Map.Content = LoadGrid(_viewModel.Size);
         }
     }
 }

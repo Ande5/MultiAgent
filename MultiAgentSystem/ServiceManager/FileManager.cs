@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultiAgentSystem.ServiceManager
 {
@@ -34,16 +30,20 @@ namespace MultiAgentSystem.ServiceManager
             }
         }
 
+        /// <summary>
+        /// Загрузка карты
+        /// </summary>
+        /// <returns></returns>
         public int[,] LoadMap()
         {
             int[,] mapDepths;
 
             using (StreamReader fileReader = new StreamReader(_path))
             {
-                int sizeMapX = Convert.ToInt32(fileReader.ReadLine());
                 int sizeMapY = Convert.ToInt32(fileReader.ReadLine());
+                int sizeMapX = Convert.ToInt32(fileReader.ReadLine());
 
-                mapDepths = new Int32[sizeMapX, sizeMapY];
+                mapDepths = new Int32[sizeMapY, sizeMapX];
 
                 for (int i = 0; i < mapDepths.GetLength(0); i++)
                 {
