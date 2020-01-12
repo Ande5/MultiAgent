@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using MultiAgentSystem.Model;
 using MultiAgentSystem.ViewModels;
 
 namespace MultiAgentSystem.Views
@@ -36,8 +39,18 @@ namespace MultiAgentSystem.Views
             {
                 grid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(size)});
                 grid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(size)});
-            }
 
+                //TODO Тест
+                int blueDegree = 255 - (int)(255 * 50 / 100 * 0.66);
+                var stack = new StackPanel
+                {
+                    Background = new SolidColorBrush(Color.FromRgb(70,70,(byte)blueDegree))
+                };
+                Grid.SetRow(stack, i);
+                Grid.SetColumn(stack, 3);
+                grid.Children.Add(stack);
+            }
+           
             stackPanel.Children.Add(grid);
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
             return stackPanel;

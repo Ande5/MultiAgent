@@ -50,7 +50,7 @@ namespace MultiAgentSystem.ViewModels
 
         protected override void Reflection(object obj)
         {
-
+            //TODO пересовка карты 
         }
     }
 }
