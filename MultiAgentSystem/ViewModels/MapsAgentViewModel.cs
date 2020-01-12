@@ -29,7 +29,8 @@ namespace MultiAgentSystem.ViewModels
             ApplyCommand = new Command(Apply);
             _fileManager = new FileManager("map.txt");
             MapDepths = _fileManager.LoadMap();
-          
+            var value = GenerationAgents.GenerationShips();
+
         }
 
         private void Apply()
