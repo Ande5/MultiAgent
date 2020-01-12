@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\Command.cs" />
+    <Compile Include="ServiceManager\FileManager.cs" />
     <Compile Include="ViewModels\BaseAgentViewModel.cs" />
     <Compile Include="ViewModels\MapsAgentViewModel.cs" />
     <Compile Include="ViewModels\ShipAgentViewModel.cs" />
@@ -100,6 +102,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\NeuralNetworkLib\NeuralNetworkLib.csproj">
+      <Project>{e3f84d73-437d-4b40-b49e-796f49b92975}</Project>
+      <Name>NeuralNetworkLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
