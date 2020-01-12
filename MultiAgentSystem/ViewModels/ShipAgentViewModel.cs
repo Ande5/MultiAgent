@@ -43,51 +43,48 @@ namespace MultiAgentSystem.ViewModels
         {
             double[] depths = new double[3];
 
-            // TODO: Еще сопоставить порядок элементов массива с направлением относительно корабля!
-            // TODO: Добавить обработку (try-catch) краев карты
-
             switch(moveDirection)
             {
                 case Direction.N:
                 default:
-                    depths[0] = _depthsMap[shipPosition.Y - 1, shipPosition.X - 1];
-                    depths[1] = _depthsMap[shipPosition.Y - 1, shipPosition.X];
-                    depths[2] = _depthsMap[shipPosition.Y - 1, shipPosition.X + 1];
+                    try { depths[0] = _depthsMap[shipPosition.Y - 1, shipPosition.X - 1]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y - 1, shipPosition.X]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y - 1, shipPosition.X + 1]; } catch { depths[2] = -50; }
                     break;
                 case Direction.NW:
-                    depths[0] = _depthsMap[shipPosition.Y, shipPosition.X - 1];
-                    depths[1] = _depthsMap[shipPosition.Y - 1, shipPosition.X - 1];
-                    depths[2] = _depthsMap[shipPosition.Y - 1, shipPosition.X];
+                    try { depths[0] = _depthsMap[shipPosition.Y, shipPosition.X - 1]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y - 1, shipPosition.X - 1]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y - 1, shipPosition.X]; } catch { depths[2] = -50; }
                     break;
                 case Direction.W:
-                    depths[0] = _depthsMap[shipPosition.Y - 1, shipPosition.X - 1];
-                    depths[1] = _depthsMap[shipPosition.Y, shipPosition.X - 1];
-                    depths[2] = _depthsMap[shipPosition.Y + 1, shipPosition.X - 1];
+                    try { depths[0] = _depthsMap[shipPosition.Y + 1, shipPosition.X - 1]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y, shipPosition.X - 1]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y - 1, shipPosition.X - 1]; } catch { depths[2] = -50; }
                     break;
                 case Direction.SW:
-                    depths[0] = _depthsMap[shipPosition.Y, shipPosition.X - 1];
-                    depths[1] = _depthsMap[shipPosition.Y + 1, shipPosition.X - 1];
-                    depths[2] = _depthsMap[shipPosition.Y + 1, shipPosition.X];
+                    try { depths[0] = _depthsMap[shipPosition.Y + 1, shipPosition.X]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y + 1, shipPosition.X - 1]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y, shipPosition.X - 1]; } catch { depths[2] = -50; }
                     break;
                 case Direction.S:
-                    depths[0] = _depthsMap[shipPosition.Y + 1, shipPosition.X - 1];
-                    depths[1] = _depthsMap[shipPosition.Y + 1, shipPosition.X];
-                    depths[2] = _depthsMap[shipPosition.Y + 1, shipPosition.X + 1];
+                    try { depths[0] = _depthsMap[shipPosition.Y + 1, shipPosition.X + 1]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y + 1, shipPosition.X]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y + 1, shipPosition.X - 1]; } catch { depths[2] = -50; }
                     break;
                 case Direction.SE:
-                    depths[0] = _depthsMap[shipPosition.Y + 1, shipPosition.X];
-                    depths[1] = _depthsMap[shipPosition.Y + 1, shipPosition.X + 1];
-                    depths[2] = _depthsMap[shipPosition.Y, shipPosition.X + 1];
+                    try { depths[0] = _depthsMap[shipPosition.Y, shipPosition.X + 1]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y + 1, shipPosition.X + 1]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y + 1, shipPosition.X]; } catch { depths[2] = -50; }
                     break;
                 case Direction.E:
-                    depths[0] = _depthsMap[shipPosition.Y - 1, shipPosition.X + 1];
-                    depths[1] = _depthsMap[shipPosition.Y, shipPosition.X + 1];
-                    depths[2] = _depthsMap[shipPosition.Y + 1, shipPosition.X + 1];
+                    try { depths[0] = _depthsMap[shipPosition.Y - 1, shipPosition.X + 1]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y, shipPosition.X + 1]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y + 1, shipPosition.X + 1]; } catch { depths[2] = -50; }
                     break;
                 case Direction.NE:
-                    depths[0] = _depthsMap[shipPosition.Y - 1, shipPosition.X];
-                    depths[1] = _depthsMap[shipPosition.Y - 1, shipPosition.X + 1];
-                    depths[2] = _depthsMap[shipPosition.Y, shipPosition.X + 1];
+                    try { depths[0] = _depthsMap[shipPosition.Y - 1, shipPosition.X]; } catch { depths[0] = -50; }
+                    try { depths[1] = _depthsMap[shipPosition.Y - 1, shipPosition.X + 1]; } catch { depths[1] = -50; }
+                    try { depths[2] = _depthsMap[shipPosition.Y, shipPosition.X + 1]; } catch { depths[2] = -50; }
                     break;
             }
 
