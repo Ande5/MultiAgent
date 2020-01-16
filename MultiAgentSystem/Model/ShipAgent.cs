@@ -9,6 +9,11 @@ namespace MultiAgentSystem.Model
         public double Speed { get; set; }
 
         /// <summary>
+        /// Скорость хода
+        /// </summary>
+        public int CurrentAwaitIteration { get; set; }
+
+        /// <summary>
         /// Максимальная скорость
         /// </summary>
         public double MaxSpeed { get; set; }

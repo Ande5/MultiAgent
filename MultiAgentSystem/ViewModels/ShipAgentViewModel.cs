@@ -19,19 +19,24 @@ namespace MultiAgentSystem.ViewModels
 
         protected override void Reflection(object obj)
         {
-            for(int i = 0; i < _shipList.Count; i++)
+            for (int i = 0; i < _shipList.Count; i++)
             {
-                // 1. Получение ответа от нейросети о следующем шаге:
-                var result = _serviceNetwork.Handle(GetSurroundingDepths(_shipList[i].Location, _shipList[i].MoveDirection));
+                _shipList[i].CurrentAwaitIteration--;
 
-                // 2. Перерисовка положения агента:
+                if (_shipList[i].CurrentAwaitIteration == 0)
+                {
+                    // 1. Получение ответа от нейросети о следующем шаге:
+                    var result = _serviceNetwork.Handle(GetSurroundingDepths(_shipList[i].Location, _shipList[i].MoveDirection));
+
+                    // 2. Перерисовка положения агента:
 
 
-                // 3. Перерисовка направления движения:
+                    // 3. Перерисовка направления движения:
 
 
-                // 4. Обработка смерти корабля, при совпадении ячеек:
+                    // 4. Обработка смерти корабля, при совпадении ячеек:
 
+                }
             }
         }
 
