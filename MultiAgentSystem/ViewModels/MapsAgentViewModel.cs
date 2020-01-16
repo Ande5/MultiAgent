@@ -26,7 +26,7 @@ namespace MultiAgentSystem.ViewModels
         }
 
 
-        private int _countAgent = 7;
+        private int _countAgent = 5;
 
         public int CountAgent
         {
