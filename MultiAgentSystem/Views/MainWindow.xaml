@@ -5,41 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiAgentSystem"
         mc:Ignorable="d"
-        Title="Multi agent system" Height="760.475" Width="1074.022">
+
+        Title="Multi agent system" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
     <Grid>
         <GroupBox x:Name="Settings" Header="Настройки" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="212">
             <Grid VerticalAlignment="Top">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="10*"/>
-                    <RowDefinition Height="10*"/>
-                    <RowDefinition Height="80*"/>
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="70*" />
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" VerticalAlignment="Center" Height="26">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="65*"/>
-                        <ColumnDefinition Width="35*"/>
+                        <ColumnDefinition Width="65*" />
+                        <ColumnDefinition Width="35*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="Размер ячейки:" Height="20"  />
-                    <TextBox Grid.Column="1" HorizontalAlignment="Center" Height="20" Width="35" Text="{Binding Size}" TextAlignment="Center"  />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Center" Text="Размер ячейки:" Height="20" />
+                    <TextBox Grid.Column="1" HorizontalAlignment="Center" Height="20" Width="35" Text="{Binding Size}"
+                             TextAlignment="Center" />
                 </Grid>
 
 
                 <Grid Grid.Row="1" VerticalAlignment="Center" Height="26">
-                    <Button Content="Ввести" Click="Apply_Clicked" ></Button>
+                    <Button Grid.Column="0" Content="Ввести" Click="Apply_Clicked" Margin="5,0,5,0"></Button>
                 </Grid>
+                <Grid Margin="0,5,0,5"  Grid.Row="2" VerticalAlignment="Center" Height="26">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*" />
+                        <ColumnDefinition Width="50*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="Запустить" Click="Start_Clicked" Margin="5,0,5,0"></Button>
+                    <Button Grid.Column="1" Content="Остановить" Click="Stop_Clicked" Margin="5,0,5,0"></Button>
+                </Grid>
+
             </Grid>
 
-
-
         </GroupBox>
-        <GroupBox x:Name="Map" Header="Карта" 
-                  
-                  HorizontalAlignment="Left" 
-                   
-                  Margin="227,10,0,0" 
-                  VerticalAlignment="Top"
-                  />
+        <GroupBox x:Name="Map" Header="Карта"
+                  HorizontalAlignment="Left"
+                  Margin="227,10,0,0"
+                  VerticalAlignment="Top" />
 
     </Grid>
 </Window>
