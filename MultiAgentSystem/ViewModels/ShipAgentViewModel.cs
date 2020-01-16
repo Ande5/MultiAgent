@@ -23,6 +23,7 @@ namespace MultiAgentSystem.ViewModels
 
         protected override void Reflection(object obj)
         {
+
             for(int i = 0; i < _shipList.Count; i++)
             {
                 // 1. Получение ответа от нейросети о следующем шаге:

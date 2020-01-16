@@ -27,5 +27,10 @@ namespace MultiAgentSystem.Model
         /// Направление движения
         /// </summary>
         public Direction MoveDirection { get; set; }
+
+        /// <summary>
+        /// Предыдущая позиция
+        /// </summary>
+        public Position PrevPosition { get; set; }
     }
 }

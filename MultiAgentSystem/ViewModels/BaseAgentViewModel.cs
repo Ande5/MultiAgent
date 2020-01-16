@@ -15,7 +15,7 @@ namespace MultiAgentSystem.ViewModels
 
         public BaseAgentViewModel()
         {
-            _timer = new Timer(Reflection, 0, 0, 200);
+            _timer = new Timer(Reflection, 0, 0, 50);
         }
 
 
