@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using MultiAgentSystem.Model;
 using NeuralNetworkLib;
 
@@ -23,7 +19,6 @@ namespace MultiAgentSystem.ViewModels
 
         protected override void Reflection(object obj)
         {
-
             for(int i = 0; i < _shipList.Count; i++)
             {
                 // 1. Получение ответа от нейросети о следующем шаге:
