@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiAgentSystem"
         mc:Ignorable="d"
+
         Title="Multi agent system" Height="450" Width="800" WindowStartupLocation="CenterScreen"
         WindowState="Maximized">
     <Grid>
-        <GroupBox x:Name="Settings" Header="Настройки" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0"
-                  VerticalAlignment="Top" Width="212">
+        <GroupBox x:Name="Settings" Header="Настройки" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="212">
             <Grid VerticalAlignment="Top">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10*" />
@@ -42,6 +42,7 @@
                 </Grid>
 
             </Grid>
+
         </GroupBox>
         <GroupBox x:Name="Map" Header="Карта"
                   HorizontalAlignment="Left"

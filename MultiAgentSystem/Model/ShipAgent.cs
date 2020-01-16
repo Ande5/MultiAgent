@@ -24,9 +24,14 @@ namespace MultiAgentSystem.Model
         public double Draft { get; set; }
 
         /// <summary>
-        /// Направление движения
+        /// Текущее нправление движения
         /// </summary>
         public Direction MoveDirection { get; set; }
+
+        /// <summary>
+        /// Нправление движения по отношению к цели
+        /// </summary>
+        public Direction DirectionToTarget { get; set; }
 
         /// <summary>
         /// Предыдущая позиция
