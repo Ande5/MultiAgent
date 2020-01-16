@@ -56,7 +56,7 @@ namespace MultiAgentSystem.ViewModels
             HandleShipCrushing(targetList);
 
             // 5. Обработка кораблей, севших на мель:
-            HandleStoppedShips();
+            HandleStoppedShips(targetList);
 
             // 6. Обработка нахождения цели:
             HandleSuccessfulShips(targetList);
@@ -206,23 +206,31 @@ namespace MultiAgentSystem.ViewModels
                     if (ShipList[k].Location.X == ShipList[j].Location.X &&
                         ShipList[k].Location.Y == ShipList[j].Location.Y && k != j)
                     {
-                        ShipList.Remove(ShipList[k]);
+                        ShipList[k].Speed = 0;
+
+                        //ShipList.Remove(ShipList[k]);
                         //targetList.RemoveAt(k);
 
-                        k--;
-                        break;
+                        //k--;
+                        //break;
                     }
                 }
             }
         }
 
-        private void HandleStoppedShips()
+        private void HandleStoppedShips(List<TargetAgent> targetList)
         {
             for (int k = 0; k < ShipList.Count; k++)
             {
                 if (_depthsMap[ShipList[k].Location.Y, ShipList[k].Location.X] < 0)
                 {
                     ShipList[k].Speed = 0;
+
+                    //ShipList.Remove(ShipList[k]);
+                    //targetList.RemoveAt(k);
+
+                    //k--;
+                    //break;
                 }
             }
         }
@@ -237,6 +245,12 @@ namespace MultiAgentSystem.ViewModels
                        ShipList[i].Location.Y == targetList[k].Location.Y)
                     {
                         ShipList[i].Speed = 0;
+
+                        //ShipList.Remove(ShipList[k]);
+                        //targetList.RemoveAt(k);
+
+                        //k--;
+                        //break;
                     }
                 }
             }
