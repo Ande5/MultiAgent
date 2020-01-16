@@ -8,16 +8,14 @@ namespace MultiAgentSystem.ViewModels
 {
     public class BaseAgentViewModel: INotifyPropertyChanged
     {
-        private readonly Timer _timer;
+        //private readonly Timer _timer;
 
-        public BaseAgentViewModel()
-        {
-            _timer = new Timer(Reflection, 0, 0, 50);
-        }
+        //public BaseAgentViewModel()
+        //{
+        //    //_timer = new Timer(Reflection, 0, 0, 50);
+        //}
 
-
-        protected virtual void Reflection(object obj){ }
-
+        //protected virtual void Reflection(object obj){ }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

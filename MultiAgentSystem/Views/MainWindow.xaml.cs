@@ -25,7 +25,7 @@ namespace MultiAgentSystem.Views
             Map.Content = LoadGrid();
             var timer = new DispatcherTimer();
             timer.Tick += new EventHandler(Reflection);
-            timer.Interval = new TimeSpan(0, 0, 50);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             timer.Start();
             // _viewModel.OnSelect += UpdateMapContent;
         }
@@ -35,7 +35,7 @@ namespace MultiAgentSystem.Views
             Map.Content = LoadGrid(_viewModel.Size);
         }
 
-        private StackPanel LoadGrid(int size = 60)
+        private StackPanel LoadGrid(int size = 45)
         {
             var stackPanel = new StackPanel();
             var grid = new Grid
@@ -96,14 +96,22 @@ namespace MultiAgentSystem.Views
                 if (shipAgent.Location.X == stackPosition.X
                     && shipAgent.Location.Y == stackPosition.Y)
                 {
-                    var ship = new Rectangle
+                    //var ship = new Rectangle
+                    //{
+                    //    Height = 25,
+                    //    Width = 50,
+                    //    RadiusX = 10,
+                    //    RadiusY = 10,
+                    //    Margin = new Thickness(0, 15, 0, 0),
+                    //    Fill = new SolidColorBrush(Color.FromRgb(143, 97, 173))
+                    //};
+
+                    var ship = new Ellipse
                     {
-                        Height = 25,
-                        Width = 50,
-                        RadiusX = 10,
-                        RadiusY = 10,
+                        Height = 30,
+                        Width = 30,
                         Margin = new Thickness(0, 15, 0, 0),
-                        Fill = new SolidColorBrush(Color.FromRgb(143, 97, 173))
+                        Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0))
                     };
 
                     stack.Children.Add(ship);
@@ -136,12 +144,14 @@ namespace MultiAgentSystem.Views
 
         private void Reflection(object sender, EventArgs e)
         {
-            Map.Content = LoadGrid(_viewModel.Size);
+            Map.Content = LoadGrid(45);
+
+            _viewModel.Reflection();
         }
 
         private void Apply_Clicked(object sender, RoutedEventArgs e)
         {
-            //Map.Content = LoadGrid(_viewModel.Size);
+            Map.Content = LoadGrid(_viewModel.Size);
         }
     }
 }

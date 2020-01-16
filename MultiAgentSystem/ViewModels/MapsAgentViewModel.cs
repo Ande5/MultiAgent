@@ -60,9 +60,15 @@ namespace MultiAgentSystem.ViewModels
         }
 
         
-        protected override void Reflection(object obj)
-        {
+        //public override void Reflection(object obj)
+        //{
           
+        //    ShipAgents = ShipAgentViewModels.ShipList;
+        //}
+
+        public void Reflection()
+        {
+            ShipAgentViewModels.Reflection(TargetAgents);
             ShipAgents = ShipAgentViewModels.ShipList;
         }
     }

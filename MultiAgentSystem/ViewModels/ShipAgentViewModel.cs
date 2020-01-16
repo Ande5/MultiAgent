@@ -8,7 +8,7 @@ namespace MultiAgentSystem.ViewModels
     public class ShipAgentViewModel : BaseAgentViewModel
     {
         private readonly ServiceNN _serviceNetwork = new ServiceNN(100000);
-        public List<ShipAgent> ShipList {get; set;} = new List<ShipAgent>();
+        public List<ShipAgent> ShipList { get; }
         private int[,] _depthsMap;
 
         private DirectionManager _directionManager;
@@ -23,7 +23,7 @@ namespace MultiAgentSystem.ViewModels
             _directionManager = new DirectionManager();
         }
 
-        protected override void Reflection(object obj)
+        public void Reflection(List<TargetAgent> targetList)
         {
             for (int i = 0; i < ShipList.Count; i++)
             {
@@ -39,9 +39,12 @@ namespace MultiAgentSystem.ViewModels
 
                     // 3. Обновление направления движения:
                     ShipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(ShipList[i].Location, ShipList[i].PrevPosition);
-                }
 
-                ShipList[i].CurrentAwaitIteration = 10 - ShipList[i].Speed;
+                    if(ShipList[i].Speed != 0)
+                    {
+                        ShipList[i].CurrentAwaitIteration = 10 - ShipList[i].Speed;
+                    }
+                }
             }
 
             // 4. Обработка смерти корабля:
@@ -62,6 +65,19 @@ namespace MultiAgentSystem.ViewModels
                 }
             //}
             //catch { }
+
+            // 5. Обработка нахождения цели:
+            for(int i = 0; i < ShipList.Count; i++)
+            {
+                for (int k = 0; k < ShipList.Count; k++)
+                {
+                    if(ShipList[i].Location.X == targetList[k].Location.X &&
+                       ShipList[i].Location.Y == targetList[k].Location.Y)
+                    {
+                        ShipList[i].Speed = 0;
+                    }
+                }
+            }
         }
 
         private double[] GetSurroundingDepths(Position shipPosition, Direction moveDirection)
@@ -118,7 +134,7 @@ namespace MultiAgentSystem.ViewModels
 
         private void SetLocationByStep(double[] netResult, ShipAgent ship)
         {
-            ship.PrevPosition = ship.Location;
+            ship.PrevPosition = new Position() { X = ship.Location.X, Y = ship.Location.Y };
 
             int maxNetResultIndex = GetMaxResultIndex(netResult);
 

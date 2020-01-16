@@ -21,7 +21,7 @@ namespace MultiAgentSystem.ServiceManager
             {
                 var shipAgent = new ShipAgent
                 {
-                    Speed = random.Next(1, 9),
+                    Speed = random.Next(8, 9),
                     Draft = random.Next(5, 35),
                     MaxSpeed = random.Next(9, 10),
                   
