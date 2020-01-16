@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using MultiAgentSystem.Model;
 using MultiAgentSystem.ViewModels;
 
@@ -12,6 +14,7 @@ namespace MultiAgentSystem.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DispatcherTimer _timer;
         private readonly MapsAgentViewModel _viewModel = new MapsAgentViewModel();
 
         public MainWindow()
@@ -19,13 +22,22 @@ namespace MultiAgentSystem.Views
             InitializeComponent();
             DataContext = _viewModel;
             Map.Content = LoadGrid();
+            InitializeTimer();
         }
 
-        private StackPanel LoadGrid(int size = 60)
+        private void InitializeTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Tick += Reflection;
+            _timer.Interval = new TimeSpan(0, 0, 0, 0, 50);
+        }
+
+        private StackPanel LoadGrid(int size = 45)
         {
             var stackPanel = new StackPanel();
             var grid = new Grid
             {
+                
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 ShowGridLines = true
@@ -57,9 +69,9 @@ namespace MultiAgentSystem.Views
                             new SolidColorBrush(Color.FromRgb((byte) redDegree, (byte) greenDegree, (byte) blueDegree))
                     };
 
-                    AddShipUI(k, z, ref stack);
+                    AddShipUI(size,k, z, ref stack);
 
-                    AddTargetUI(k,z, ref stack);
+                    AddTargetUI(size,k,z, ref stack);
 
                     Grid.SetRow(stack, k);
                     Grid.SetColumn(stack, z); 
@@ -72,7 +84,7 @@ namespace MultiAgentSystem.Views
             return stackPanel;
         }
 
-        private void AddShipUI(int gridX, int gridY, ref StackPanel stack)
+        private void AddShipUI(int size, int gridX, int gridY, ref StackPanel stack)
         {
             foreach (var shipAgent in _viewModel.ShipAgents)
             {
@@ -81,14 +93,22 @@ namespace MultiAgentSystem.Views
                 if (shipAgent.Location.X == stackPosition.X
                     && shipAgent.Location.Y == stackPosition.Y)
                 {
-                    var ship = new Rectangle
+                    //var ship = new Rectangle
+                    //{
+                    //    Height = 25,
+                    //    Width = 50,
+                    //    RadiusX = 10,
+                    //    RadiusY = 10,
+                    //    Margin = new Thickness(0, 15, 0, 0),
+                    //    Fill = new SolidColorBrush(Color.FromRgb(143, 97, 173))
+                    //};
+
+                    var ship = new Ellipse
                     {
-                        Height = 25,
-                        Width = 50,
-                        RadiusX = 10,
-                        RadiusY = 10,
-                        Margin = new Thickness(0, 15, 0, 0),
-                        Fill = new SolidColorBrush(Color.FromRgb(143, 97, 173))
+                        Height = size -15,
+                        Width = size - 15,
+                        Margin = new Thickness(0, 10, 0, 0),
+                        Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0))
                     };
 
                     stack.Children.Add(ship);
@@ -96,7 +116,7 @@ namespace MultiAgentSystem.Views
             }
         }
 
-        private void AddTargetUI(int gridX, int gridY, ref StackPanel stack)
+        private void AddTargetUI(int size, int gridX, int gridY, ref StackPanel stack)
         {
             foreach (var targetAgent in _viewModel.TargetAgents)
             {
@@ -107,9 +127,9 @@ namespace MultiAgentSystem.Views
                 {
                     var ship = new Ellipse
                     {
-                        Height = 30,
-                        Width = 30,
-                        Margin = new Thickness(0, 15, 0, 0),
+                        Height = size - 15,
+                        Width = size - 15,
+                        Margin = new Thickness(0, 10, 0, 0),
                         Fill = new SolidColorBrush(Color.FromRgb(226, 255, 0))
                     };
 
@@ -118,9 +138,22 @@ namespace MultiAgentSystem.Views
             }
         }
 
+
+        private void Reflection(object sender, EventArgs e)
+        {
+            Map.Content = LoadGrid(45);
+
+            _viewModel.Reflection();
+        }
+
         private void Apply_Clicked(object sender, RoutedEventArgs e)
         {
             Map.Content = LoadGrid(_viewModel.Size);
         }
+
+        private void Start_Clicked(object sender, RoutedEventArgs e) => _timer.Start();
+
+        private void Stop_Clicked(object sender, RoutedEventArgs e) => _timer.Stop();
+
     }
 }
