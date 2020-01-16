@@ -39,9 +39,8 @@ namespace MultiAgentSystem.ServiceManager
                     directionManager.InitializeDirection(shipAgent.Location, targetAgents[i].Location);
                 shipAgent.CurrentAwaitIteration = 10 - shipAgent.Speed;
 
-
                 CheckLocationShip(gridX, gridY, ref shipAgent);
-
+                CheckLocationShipByTarget(gridX, gridY, targetAgents, directionManager, ref shipAgent);
                 shipAgents.Add(shipAgent);
             }
 
@@ -72,7 +71,7 @@ namespace MultiAgentSystem.ServiceManager
                 };
 
                 CheckLocationTarget(gridX, gridY, ref targetAgent);
-
+              
                 targetAgents.Add(targetAgent);
             }
 
@@ -115,6 +114,30 @@ namespace MultiAgentSystem.ServiceManager
                         CheckLocationShip(gridX, gridY, ref shipAgent);
                     }
                 }
+            }
+        }
+
+
+        private void CheckLocationShipByTarget(int gridX, int gridY,
+            List<TargetAgent> targetAgents, DirectionManager directionManager, ref ShipAgent shipAgent)
+        {
+            var random = new Random(DateTime.Now.Millisecond);
+            int count = 0;
+            
+            foreach (var targetAgent in targetAgents)
+            {
+                if (targetAgent.Location.X == shipAgent.Location.X &&
+                    targetAgent.Location.Y == shipAgent.Location.Y)
+                {
+                    shipAgent.Location.X = random.Next(1, gridX - 1);
+                    shipAgent.Location.Y = random.Next(1, gridX - 1);
+                    shipAgent.MoveDirection =
+                        directionManager.InitializeDirection(shipAgent.Location, targetAgents[count].Location);
+
+                    CheckLocationShipByTarget(gridX, gridY, targetAgents, directionManager, ref shipAgent);
+                }
+
+                count++;
             }
         }
 
