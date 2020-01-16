@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MultiAgentSystem.Model
 {
     public class ShipAgent : Agent
@@ -12,6 +7,11 @@ namespace MultiAgentSystem.Model
         /// Скорость хода
         /// </summary>
         public double Speed { get; set; }
+
+        /// <summary>
+        /// Скорость хода
+        /// </summary>
+        public int CurrentAwaitIteration { get; set; }
 
         /// <summary>
         /// Максимальная скорость
@@ -27,5 +27,10 @@ namespace MultiAgentSystem.Model
         /// Направление движения
         /// </summary>
         public Direction MoveDirection { get; set; }
+
+        /// <summary>
+        /// Предыдущая позиция
+        /// </summary>
+        public Position PrevPosition { get; set; }
     }
 }

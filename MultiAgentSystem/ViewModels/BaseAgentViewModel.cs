@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace MultiAgentSystem.ViewModels
 {
@@ -15,7 +12,7 @@ namespace MultiAgentSystem.ViewModels
 
         public BaseAgentViewModel()
         {
-            _timer = new Timer(Reflection, 0, 0, 200);
+            _timer = new Timer(Reflection, 0, 0, 50);
         }
 
 
