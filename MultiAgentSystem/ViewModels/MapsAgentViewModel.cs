@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MultiAgentSystem.Helpers;
 using MultiAgentSystem.Model;
 using MultiAgentSystem.ServiceManager;
-using MultiAgentSystem.Views;
 
 namespace MultiAgentSystem.ViewModels
 {
     public class MapsAgentViewModel : BaseAgentViewModel
     {
-
-        public List<ShipAgent> ShipAgents { get; set; } = new List<ShipAgent>();
-
         public readonly List<TargetAgent> TargetAgents;
+        public List<ShipAgent> ShipAgents { get; set; } = new List<ShipAgent>();
 
         public int[,] MapDepths { get; }
         private readonly FileManager _fileManager;
         private readonly GenerationAgents _generationAgents;
+        
 
         private int _size;
 
@@ -29,8 +24,6 @@ namespace MultiAgentSystem.ViewModels
             get => _size;
             set => SetProperty(ref _size, value);
         }
-
-        public Action<object> OnSelect { get; set; }
 
         public ICommand ApplyCommand { get; }
 
@@ -54,17 +47,7 @@ namespace MultiAgentSystem.ViewModels
             
         }
 
-        private void Apply()
-        {
-
-        }
-
-        
-        //public override void Reflection(object obj)
-        //{
-          
-        //    ShipAgents = ShipAgentViewModels.ShipList;
-        //}
+        private void Apply(){}
 
         public void Reflection()
         {
