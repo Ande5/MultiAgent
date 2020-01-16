@@ -21,7 +21,7 @@ namespace MultiAgentSystem.Views
         {
             InitializeComponent();
             DataContext = _viewModel;
-            Map.Content = LoadGrid();
+            Map.Content = LoadGrid(_viewModel.Size);
             InitializeTimer();
         }
 
@@ -32,7 +32,7 @@ namespace MultiAgentSystem.Views
             _timer.Interval = new TimeSpan(0, 0, 0, 0, 50);
         }
 
-        private StackPanel LoadGrid(int size = 45)
+        private StackPanel LoadGrid(int size)
         {
             var stackPanel = new StackPanel();
             var grid = new Grid
@@ -141,13 +141,13 @@ namespace MultiAgentSystem.Views
 
         private void Reflection(object sender, EventArgs e)
         {
-            Map.Content = LoadGrid(45);
-
+            Map.Content = LoadGrid(_viewModel.Size);
             _viewModel.Reflection();
         }
 
         private void Apply_Clicked(object sender, RoutedEventArgs e)
         {
+            _viewModel.Apply();
             Map.Content = LoadGrid(_viewModel.Size);
         }
 

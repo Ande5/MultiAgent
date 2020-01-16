@@ -206,6 +206,7 @@ namespace MultiAgentSystem.ViewModels
                         targetList.RemoveAt(k);
 
                         k--;
+                        break;
                     }
                 }
             }

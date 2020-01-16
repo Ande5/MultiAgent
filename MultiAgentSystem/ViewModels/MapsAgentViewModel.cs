@@ -9,21 +9,31 @@ namespace MultiAgentSystem.ViewModels
 {
     public class MapsAgentViewModel : BaseAgentViewModel
     {
-        public readonly List<TargetAgent> TargetAgents;
+        public List<TargetAgent> TargetAgents;
         public List<ShipAgent> ShipAgents { get; set; } = new List<ShipAgent>();
 
         public int[,] MapDepths { get; }
         private readonly FileManager _fileManager;
-        private readonly GenerationAgents _generationAgents;
+        private GenerationAgents _generationAgents;
         
 
-        private int _size;
+        private int _size = 45;
 
         public int Size
         {
             get => _size;
             set => SetProperty(ref _size, value);
         }
+
+
+        private int _countAgent = 7;
+
+        public int CountAgent
+        {
+            get => _countAgent;
+            set => SetProperty(ref _countAgent, value);
+        }
+
 
         public ICommand ApplyCommand { get; }
 
@@ -34,20 +44,24 @@ namespace MultiAgentSystem.ViewModels
             ApplyCommand = new Command(Apply);
             _fileManager = new FileManager("map.txt");
             MapDepths = _fileManager.LoadMap();
+            Initialization();
+        }
 
-            _generationAgents = new GenerationAgents {Count = 3 };
+        private void Initialization()
+        {
+            _generationAgents = new GenerationAgents(MapDepths) { Count = CountAgent };
 
-            TargetAgents = _generationAgents.GenTargetAgents(MapDepths.GetLength(0), 
+            TargetAgents = _generationAgents.GenTargetAgents(MapDepths.GetLength(0),
                 MapDepths.GetLength(1)).Distinct().ToList();
 
-            ShipAgents = _generationAgents.GenerationShips(MapDepths.GetLength(0), 
+            ShipAgents = _generationAgents.GenerationShips(MapDepths.GetLength(0),
                 MapDepths.GetLength(1), TargetAgents).Distinct().ToList();
 
             ShipAgentViewModels = new ShipAgentViewModel(MapDepths, ShipAgents);
-            
         }
 
-        private void Apply(){}
+        public void Apply() => Initialization();
+      
 
         public void Reflection()
         {

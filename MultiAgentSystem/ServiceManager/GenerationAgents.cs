@@ -6,8 +6,11 @@ namespace MultiAgentSystem.ServiceManager
 {
     public class GenerationAgents
     {
-
         public int Count { get; set; }
+
+        private readonly int[,] _mapDepths;
+
+        public GenerationAgents(int[,] mapDepths) => _mapDepths = mapDepths;
 
         public List<ShipAgent> GenerationShips(int gridX, int gridY, List<TargetAgent> targetAgents)
         {
@@ -27,14 +30,17 @@ namespace MultiAgentSystem.ServiceManager
                   
                     Location = new Position
                     {
-                        X = random.Next(0, gridX),
-                        Y = random.Next(0, gridY)
+                        X = random.Next(1, gridX-1),
+                        Y = random.Next(1, gridY)
                     }
                 };
 
                 shipAgent.MoveDirection =
                     directionManager.InitializeDirection(shipAgent.Location, targetAgents[i].Location);
                 shipAgent.CurrentAwaitIteration = 10 - shipAgent.Speed;
+
+
+                CheckLocationShip(gridX, gridY, ref shipAgent);
 
                 shipAgents.Add(shipAgent);
             }
@@ -53,20 +59,63 @@ namespace MultiAgentSystem.ServiceManager
             var targetAgents = new List<TargetAgent>();
 
             var random = new Random(DateTime.Now.Millisecond);
-            
-            for (int i = 0; i < Count; i++)
+
+            for (int z = 0; z < Count; z++)
             {
-                targetAgents.Add(new TargetAgent
+                var targetAgent = new TargetAgent
                 {
                     Location = new Position
                     {
-                        X = random.Next(0, gridX),
-                        Y = random.Next(0, gridY)
+                        X = random.Next(1, gridX - 1),
+                        Y = random.Next(1, gridY)
                     }
-                });
+                };
+
+                CheckLocationTarget(gridX, gridY, ref targetAgent);
+
+                targetAgents.Add(targetAgent);
             }
 
             return targetAgents;
+        }
+
+        private void CheckLocationTarget(int gridX, int gridY, ref TargetAgent targetAgent)
+        {
+            var random = new Random(DateTime.Now.Millisecond);
+
+            for (int i = 0; i < _mapDepths.GetLength(0); i++)
+            {
+                for (int j = 0; j < _mapDepths.GetLength(1); j++)
+                {
+                    if (_mapDepths[i, j] < 0
+                        && targetAgent.Location.X == i && targetAgent.Location.Y == j)
+                    {
+                        targetAgent.Location.X = random.Next(1, gridX - 1);
+                        targetAgent.Location.Y = random.Next(1, gridY);
+                        CheckLocationTarget(gridX, gridY, ref targetAgent);
+                    }
+                }
+            }
+        }
+
+
+        private void CheckLocationShip(int gridX, int gridY, ref ShipAgent shipAgent)
+        {
+            var random = new Random(DateTime.Now.Millisecond);
+
+            for (int i = 0; i < _mapDepths.GetLength(0); i++)
+            {
+                for (int j = 0; j < _mapDepths.GetLength(1); j++)
+                {
+                    if (_mapDepths[i, j] < 0
+                        && shipAgent.Location.X == i && shipAgent.Location.Y == j)
+                    {
+                        shipAgent.Location.X = random.Next(1, gridX - 1);
+                        shipAgent.Location.Y = random.Next(1, gridY);
+                        CheckLocationShip(gridX, gridY, ref shipAgent);
+                    }
+                }
+            }
         }
 
     }
