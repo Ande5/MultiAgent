@@ -24,27 +24,55 @@ namespace MultiAgentSystem.ServiceManager
             {
                 var shipAgent = new ShipAgent
                 {
-                    Speed = random.Next(10, 15),
+                    Speed = random.Next(10, 20),
                     Draft = random.Next(5, 35),
                     MaxSpeed = random.Next(14, 15),
                   
                     Location = new Position
                     {
-                        X = random.Next(1, gridX-1),
-                        Y = random.Next(1, gridY)
+                        X = random.Next(2, gridX - 2),
+                        Y = random.Next(2, gridY - 1)
                     }
                 };
 
-                shipAgent.MoveDirection =
-                    directionManager.InitializeDirection(shipAgent.Location, targetAgents[i].Location);
+                shipAgent.MoveDirection = directionManager.InitializeDirection(shipAgent.Location, targetAgents[i].Location);
                 shipAgent.CurrentAwaitIteration = 20 - shipAgent.Speed;
 
-                CheckLocationShip(gridX, gridY, ref shipAgent);
-                CheckLocationShipByTarget(gridX, gridY, targetAgents, directionManager, ref shipAgent);
-                shipAgents.Add(shipAgent);
+                //CheckLocationShip(gridX, gridY, ref shipAgent);
+                //CheckLocationShipByTarget(gridX, gridY, targetAgents, directionManager, ref shipAgent);
+
+                SpawnOnValidLocation(ref shipAgent, shipAgents, targetAgents, random, gridX, gridY);
             }
 
             return shipAgents;
+        }
+
+        private void SpawnOnValidLocation(ref ShipAgent shipAgent, List<ShipAgent> shipAgents, List<TargetAgent> targetAgents, Random random, int gridX, int gridY)
+        {
+            while (true)
+            {
+                shipAgent.Location = new Position { X = random.Next(1, gridX - 1), Y = random.Next(1, gridY) };
+
+                bool SpawnSuccess = true;
+
+                for (int k = 0; k < shipAgents.Count; k++)
+                {
+                    if ((shipAgent.Location.X == shipAgents[k].Location.X && shipAgent.Location.Y == shipAgents[k].Location.Y) ||
+                        (shipAgent.Location.X == targetAgents[k].Location.X && shipAgent.Location.Y == targetAgents[k].Location.Y) ||
+                        _mapDepths[shipAgent.Location.Y, shipAgent.Location.X] < 0)
+                    {
+                        SpawnSuccess = false;
+                        break;
+                    }
+                }
+
+                if (SpawnSuccess)
+                {
+                    break;
+                }
+            }
+
+            shipAgents.Add(shipAgent);
         }
 
         /// <summary>
@@ -65,8 +93,8 @@ namespace MultiAgentSystem.ServiceManager
                 {
                     Location = new Position
                     {
-                        X = random.Next(1, gridX - 1),
-                        Y = random.Next(1, gridY)
+                        X = random.Next(2, gridX - 2),
+                        Y = random.Next(2, gridY - 1)
                     }
                 };
 
@@ -97,7 +125,6 @@ namespace MultiAgentSystem.ServiceManager
             }
         }
 
-
         private void CheckLocationShip(int gridX, int gridY, ref ShipAgent shipAgent)
         {
             var random = new Random(DateTime.Now.Millisecond);
@@ -117,7 +144,6 @@ namespace MultiAgentSystem.ServiceManager
             }
         }
 
-
         private void CheckLocationShipByTarget(int gridX, int gridY,
             List<TargetAgent> targetAgents, DirectionManager directionManager, ref ShipAgent shipAgent)
         {
@@ -129,8 +155,8 @@ namespace MultiAgentSystem.ServiceManager
                 if (targetAgent.Location.X == shipAgent.Location.X &&
                     targetAgent.Location.Y == shipAgent.Location.Y)
                 {
-                    shipAgent.Location.X = random.Next(1, gridX - 1);
-                    shipAgent.Location.Y = random.Next(1, gridX - 1);
+                    shipAgent.Location.X = random.Next(2, gridX - 2);
+                    shipAgent.Location.Y = random.Next(2, gridY - 2);
                     shipAgent.MoveDirection =
                         directionManager.InitializeDirection(shipAgent.Location, targetAgents[count].Location);
 
