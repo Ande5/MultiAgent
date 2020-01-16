@@ -7,6 +7,7 @@ using System.Windows.Input;
 using MultiAgentSystem.Helpers;
 using MultiAgentSystem.Model;
 using MultiAgentSystem.ServiceManager;
+using MultiAgentSystem.Views;
 
 namespace MultiAgentSystem.ViewModels
 {
@@ -19,6 +20,7 @@ namespace MultiAgentSystem.ViewModels
 
         public int[,] MapDepths { get; }
         private readonly FileManager _fileManager;
+        private readonly GenerationAgents _generationAgents;
 
         private int _size;
 
@@ -28,7 +30,11 @@ namespace MultiAgentSystem.ViewModels
             set => SetProperty(ref _size, value);
         }
 
+        public Action<object> OnSelect { get; set; }
+
         public ICommand ApplyCommand { get; }
+
+        public ShipAgentViewModel ShipAgentViewModels;
 
         public MapsAgentViewModel()
         {
@@ -36,13 +42,15 @@ namespace MultiAgentSystem.ViewModels
             _fileManager = new FileManager("map.txt");
             MapDepths = _fileManager.LoadMap();
 
-            ShipAgents = GenerationAgents
-                .GenerationShips(MapDepths.GetLength(0)
-                    , MapDepths.GetLength(1)).Distinct().ToList();
+            _generationAgents = new GenerationAgents {Count = 3 };
 
-            TargetAgents = GenerationAgents
-                .GenTargetAgents(MapDepths.GetLength(0)
-                    , MapDepths.GetLength(1)).Distinct().ToList();
+            TargetAgents = _generationAgents.GenTargetAgents(MapDepths.GetLength(0), 
+                MapDepths.GetLength(1)).Distinct().ToList();
+
+            ShipAgents = _generationAgents.GenerationShips(MapDepths.GetLength(0), 
+                MapDepths.GetLength(1), TargetAgents).Distinct().ToList();
+
+            ShipAgentViewModels = new ShipAgentViewModel(MapDepths, ShipAgents);
         }
 
         private void Apply()
@@ -50,10 +58,12 @@ namespace MultiAgentSystem.ViewModels
 
         }
 
-
+        
         protected override void Reflection(object obj)
         {
             //TODO пересовка карты 
+            //OnSelect?.BeginInvoke;
+            //OnSelect?.Invoke(obj);
         }
     }
 }

@@ -12,9 +12,10 @@ namespace MultiAgentSystem.ViewModels
 
         private ShipAgentViewModel() { }
 
-        public ShipAgentViewModel(int[,] depthsMap)
+        public ShipAgentViewModel(int[,] depthsMap, List<ShipAgent> shipAgents)
         {
             _depthsMap = depthsMap;
+            _shipList = shipAgents;
         }
 
         protected override void Reflection(object obj)
@@ -37,6 +38,8 @@ namespace MultiAgentSystem.ViewModels
                     // 4. Обработка смерти корабля, при совпадении ячеек:
 
                 }
+
+                _shipList[i].CurrentAwaitIteration = 10 - _shipList[i].Speed;
             }
         }
 

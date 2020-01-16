@@ -4,27 +4,39 @@ using MultiAgentSystem.Model;
 
 namespace MultiAgentSystem.ServiceManager
 {
-    public static class GenerationAgents
+    public class GenerationAgents
     {
-        public static List<ShipAgent> GenerationShips(int gridX, int gridY)
+
+        public int Count { get; set; }
+
+        public List<ShipAgent> GenerationShips(int gridX, int gridY, List<TargetAgent> targetAgents)
         {
             var shipAgents = new List<ShipAgent>();
 
+            var directionManager = new DirectionManager();
+
             var random = new Random(DateTime.Now.Millisecond);
-            var shipCount =  random.Next(3, 8);
-            for (int i = 0; i < shipCount; i++)
+           
+            for (int i = 0; i < Count; i++)
             {
-                shipAgents.Add(new ShipAgent
+                var shipAgent = new ShipAgent
                 {
-                    Speed = random.Next(20,50),
-                    Draft = random.Next(5,35),
-                    MaxSpeed = random.Next(40,50),
+                    Speed = random.Next(1, 9),
+                    Draft = random.Next(5, 35),
+                    MaxSpeed = random.Next(9, 10),
+                  
                     Location = new Position
                     {
                         X = random.Next(0, gridX),
                         Y = random.Next(0, gridY)
                     }
-                });
+                };
+
+                shipAgent.MoveDirection =
+                    directionManager.InitializeDirection(shipAgent.Location, targetAgents[i].Location);
+                shipAgent.CurrentAwaitIteration = 10 - shipAgent.Speed;
+
+                shipAgents.Add(shipAgent);
             }
 
             return shipAgents;
@@ -36,13 +48,13 @@ namespace MultiAgentSystem.ServiceManager
         /// <param name="gridX"></param>
         /// <param name="gridY"></param>
         /// <returns></returns>
-        public static List<TargetAgent> GenTargetAgents(int gridX, int gridY)
+        public List<TargetAgent> GenTargetAgents(int gridX, int gridY)
         {
             var targetAgents = new List<TargetAgent>();
 
             var random = new Random(DateTime.Now.Millisecond);
-            var targetCount = random.Next(3, 8);
-            for (int i = 0; i < targetCount; i++)
+            
+            for (int i = 0; i < Count; i++)
             {
                 targetAgents.Add(new TargetAgent
                 {

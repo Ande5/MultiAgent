@@ -33,7 +33,13 @@
            
            
         </GroupBox>
-        <GroupBox x:Name="Map" Header="Карта" HorizontalAlignment="Left" Height="399" Margin="227,10,0,0" VerticalAlignment="Top" Width="555"/>
+        <GroupBox x:Name="Map" Header="Карта" 
+                  
+                  HorizontalAlignment="Left" 
+                   
+                  Margin="227,10,0,0" 
+                  VerticalAlignment="Top"
+                  />
 
     </Grid>
 </Window>

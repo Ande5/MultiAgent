@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using MultiAgentSystem.Model;
 using MultiAgentSystem.ViewModels;
 
@@ -12,6 +15,7 @@ namespace MultiAgentSystem.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+       
         private readonly MapsAgentViewModel _viewModel = new MapsAgentViewModel();
 
         public MainWindow()
@@ -19,6 +23,16 @@ namespace MultiAgentSystem.Views
             InitializeComponent();
             DataContext = _viewModel;
             Map.Content = LoadGrid();
+            var timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(Reflection);
+            timer.Interval = new TimeSpan(0, 0, 50);
+            timer.Start();
+            // _viewModel.OnSelect += UpdateMapContent;
+        }
+
+        private void UpdateMapContent(object obj)
+        {
+            Map.Content = LoadGrid(_viewModel.Size);
         }
 
         private StackPanel LoadGrid(int size = 60)
@@ -26,6 +40,7 @@ namespace MultiAgentSystem.Views
             var stackPanel = new StackPanel();
             var grid = new Grid
             {
+                
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 ShowGridLines = true
@@ -116,6 +131,12 @@ namespace MultiAgentSystem.Views
                     stack.Children.Add(ship);
                 }
             }
+        }
+
+
+        private void Reflection(object sender, EventArgs e)
+        {
+            Map.Content = LoadGrid(_viewModel.Size);
         }
 
         private void Apply_Clicked(object sender, RoutedEventArgs e)
