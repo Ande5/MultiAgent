@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
 using MultiAgentSystem.Model;
 
 namespace MultiAgentSystem.ServiceManager
 {
     public static class GenerationAgents
     {
-
-        public static List<ShipAgent> GenerationShips()
+        public static List<ShipAgent> GenerationShips(int gridX, int gridY)
         {
             var shipAgents = new List<ShipAgent>();
 
@@ -23,11 +18,44 @@ namespace MultiAgentSystem.ServiceManager
                 {
                     Speed = random.Next(20,50),
                     Draft = random.Next(5,35),
-                    MaxSpeed = random.Next(40,50)
+                    MaxSpeed = random.Next(40,50),
+                    Location = new Position
+                    {
+                        X = random.Next(0, gridX),
+                        Y = random.Next(0, gridY)
+                    }
                 });
             }
 
             return shipAgents;
         }
+
+        /// <summary>
+        /// Генерация целей
+        /// </summary>
+        /// <param name="gridX"></param>
+        /// <param name="gridY"></param>
+        /// <returns></returns>
+        public static List<TargetAgent> GenTargetAgents(int gridX, int gridY)
+        {
+            var targetAgents = new List<TargetAgent>();
+
+            var random = new Random(DateTime.Now.Millisecond);
+            var targetCount = random.Next(3, 8);
+            for (int i = 0; i < targetCount; i++)
+            {
+                targetAgents.Add(new TargetAgent
+                {
+                    Location = new Position
+                    {
+                        X = random.Next(0, gridX),
+                        Y = random.Next(0, gridY)
+                    }
+                });
+            }
+
+            return targetAgents;
+        }
+
     }
 }

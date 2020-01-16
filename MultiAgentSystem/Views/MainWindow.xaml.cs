@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
+using MultiAgentSystem.Model;
 using MultiAgentSystem.ViewModels;
 
 namespace MultiAgentSystem.Views
@@ -55,6 +57,10 @@ namespace MultiAgentSystem.Views
                             new SolidColorBrush(Color.FromRgb((byte) redDegree, (byte) greenDegree, (byte) blueDegree))
                     };
 
+                    AddShipUI(k, z, ref stack);
+
+                    AddTargetUI(k,z, ref stack);
+
                     Grid.SetRow(stack, k);
                     Grid.SetColumn(stack, z); 
                     grid.Children.Add(stack);
@@ -64,6 +70,52 @@ namespace MultiAgentSystem.Views
             stackPanel.Children.Add(grid);
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
             return stackPanel;
+        }
+
+        private void AddShipUI(int gridX, int gridY, ref StackPanel stack)
+        {
+            foreach (var shipAgent in _viewModel.ShipAgents)
+            {
+                var stackPosition = new Position { X = gridX, Y = gridY };
+
+                if (shipAgent.Location.X == stackPosition.X
+                    && shipAgent.Location.Y == stackPosition.Y)
+                {
+                    var ship = new Rectangle
+                    {
+                        Height = 25,
+                        Width = 50,
+                        RadiusX = 10,
+                        RadiusY = 10,
+                        Margin = new Thickness(0, 15, 0, 0),
+                        Fill = new SolidColorBrush(Color.FromRgb(143, 97, 173))
+                    };
+
+                    stack.Children.Add(ship);
+                }
+            }
+        }
+
+        private void AddTargetUI(int gridX, int gridY, ref StackPanel stack)
+        {
+            foreach (var targetAgent in _viewModel.TargetAgents)
+            {
+                var stackPosition = new Position { X = gridX, Y = gridY };
+
+                if (targetAgent.Location.X == stackPosition.X
+                    && targetAgent.Location.Y == stackPosition.Y)
+                {
+                    var ship = new Ellipse
+                    {
+                        Height = 30,
+                        Width = 30,
+                        Margin = new Thickness(0, 15, 0, 0),
+                        Fill = new SolidColorBrush(Color.FromRgb(226, 255, 0))
+                    };
+
+                    stack.Children.Add(ship);
+                }
+            }
         }
 
         private void Apply_Clicked(object sender, RoutedEventArgs e)

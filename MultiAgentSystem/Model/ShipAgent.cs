@@ -6,7 +6,7 @@ namespace MultiAgentSystem.Model
         /// <summary>
         /// Скорость хода
         /// </summary>
-        public double Speed { get; set; }
+        public int Speed { get; set; }
 
         /// <summary>
         /// Скорость хода
@@ -16,7 +16,7 @@ namespace MultiAgentSystem.Model
         /// <summary>
         /// Максимальная скорость
         /// </summary>
-        public double MaxSpeed { get; set; }
+        public int MaxSpeed { get; set; }
 
         /// <summary>
         /// Осадка
