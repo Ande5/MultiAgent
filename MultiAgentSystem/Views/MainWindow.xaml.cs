@@ -141,7 +141,7 @@ namespace MultiAgentSystem.Views
 
         private void Apply_Clicked(object sender, RoutedEventArgs e)
         {
-            Map.Content = LoadGrid(_viewModel.Size);
+            //Map.Content = LoadGrid(_viewModel.Size);
         }
     }
 }

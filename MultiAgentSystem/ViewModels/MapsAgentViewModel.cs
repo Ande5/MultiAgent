@@ -14,7 +14,7 @@ namespace MultiAgentSystem.ViewModels
     public class MapsAgentViewModel : BaseAgentViewModel
     {
 
-        public readonly List<ShipAgent> ShipAgents;
+        public List<ShipAgent> ShipAgents { get; set; } = new List<ShipAgent>();
 
         public readonly List<TargetAgent> TargetAgents;
 
@@ -51,6 +51,7 @@ namespace MultiAgentSystem.ViewModels
                 MapDepths.GetLength(1), TargetAgents).Distinct().ToList();
 
             ShipAgentViewModels = new ShipAgentViewModel(MapDepths, ShipAgents);
+            
         }
 
         private void Apply()
@@ -61,9 +62,8 @@ namespace MultiAgentSystem.ViewModels
         
         protected override void Reflection(object obj)
         {
-            //TODO пересовка карты 
-            //OnSelect?.BeginInvoke;
-            //OnSelect?.Invoke(obj);
+          
+            ShipAgents = ShipAgentViewModels.ShipList;
         }
     }
 }

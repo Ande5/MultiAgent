@@ -8,7 +8,7 @@ namespace MultiAgentSystem.ViewModels
     public class ShipAgentViewModel : BaseAgentViewModel
     {
         private readonly ServiceNN _serviceNetwork = new ServiceNN(100000);
-        private List<ShipAgent> _shipList = new List<ShipAgent>();
+        public List<ShipAgent> ShipList {get; set;} = new List<ShipAgent>();
         private int[,] _depthsMap;
 
         private DirectionManager _directionManager;
@@ -18,43 +18,44 @@ namespace MultiAgentSystem.ViewModels
         public ShipAgentViewModel(int[,] depthsMap, List<ShipAgent> shipAgents)
         {
             _depthsMap = depthsMap;
-            _shipList = shipAgents;
+            ShipList = shipAgents;
 
             _directionManager = new DirectionManager();
         }
 
         protected override void Reflection(object obj)
         {
-            for (int i = 0; i < _shipList.Count; i++)
+            for (int i = 0; i < ShipList.Count; i++)
             {
-                _shipList[i].CurrentAwaitIteration--;
+                ShipList[i].CurrentAwaitIteration--;
 
-                if (_shipList[i].CurrentAwaitIteration == 0)
+                if (ShipList[i].CurrentAwaitIteration == 0)
                 {
                     // 1. Получение ответа от нейросети о следующем шаге:
-                    var result = _serviceNetwork.Handle(GetSurroundingDepths(_shipList[i].Location, _shipList[i].MoveDirection));
+                    var result = _serviceNetwork.Handle(GetSurroundingDepths(ShipList[i].Location, ShipList[i].MoveDirection));
 
                     // 2. Обработка шага в клетку:
-                    SetLocationByStep(result, _shipList[i]);
+                    SetLocationByStep(result, ShipList[i]);
 
                     // 3. Обновление направления движения:
-                    _shipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(_shipList[i].Location, _shipList[i].PrevPosition);
+                    ShipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(ShipList[i].Location, ShipList[i].PrevPosition);
                 }
 
-                _shipList[i].CurrentAwaitIteration = 10 - _shipList[i].Speed;
+                ShipList[i].CurrentAwaitIteration = 10 - ShipList[i].Speed;
             }
 
             // 4. Обработка смерти корабля:
             //try
             //{
-                for (int k = 0; k < _shipList.Count; k++)
+                for (int k = 0; k < ShipList.Count; k++)
                 {
-                    for (int j = 0; j < _shipList.Count; j++)
+                    for (int j = 0; j < ShipList.Count; j++)
                     {
-                        if (_shipList[k].Location.X == _shipList[j].Location.X &&
-                            _shipList[k].Location.Y == _shipList[j].Location.Y)
+                        if (ShipList[k].Location.X == ShipList[j].Location.X &&
+                            ShipList[k].Location.Y == ShipList[j].Location.Y && k !=j)
                         {
-                            _shipList.Remove(_shipList[k]);
+                            ShipList.Remove(ShipList[k]);
+                           
                             k--;
                         }
                     }
