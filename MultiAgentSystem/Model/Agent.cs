@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MultiAgentSystem.Model
 {
-    public class Agent
+    public class Agent: IEquatable<Agent>
     {
         /// <summary>
         /// Время нахождения в ячейке
@@ -18,11 +14,17 @@ namespace MultiAgentSystem.Model
         /// </summary>
         public Position Location { get; set; }
 
-
-        protected virtual void Reflection()
+        public bool Equals(Agent other)
         {
 
-        }
+            //Check whether the compared object is null. 
+            if (Object.ReferenceEquals(other, null)) return false;
 
+            //Check whether the compared object references the same data. 
+            if (Object.ReferenceEquals(this, other)) return true;
+
+            //Check whether the products' properties are equal. 
+            return Location.Equals(other.Location);
+        }
     }
 }
