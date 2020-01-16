@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MultiAgentSystem.Model;
+using MultiAgentSystem.ServiceManager;
 using NeuralNetworkLib;
 
 namespace MultiAgentSystem.ViewModels
@@ -10,12 +11,16 @@ namespace MultiAgentSystem.ViewModels
         private List<ShipAgent> _shipList = new List<ShipAgent>();
         private int[,] _depthsMap;
 
+        private DirectionManager _directionManager;
+
         private ShipAgentViewModel() { }
 
         public ShipAgentViewModel(int[,] depthsMap, List<ShipAgent> shipAgents)
         {
             _depthsMap = depthsMap;
             _shipList = shipAgents;
+
+            _directionManager = new DirectionManager();
         }
 
         protected override void Reflection(object obj)
@@ -29,13 +34,13 @@ namespace MultiAgentSystem.ViewModels
                     // 1. Получение ответа от нейросети о следующем шаге:
                     var result = _serviceNetwork.Handle(GetSurroundingDepths(_shipList[i].Location, _shipList[i].MoveDirection));
 
-                    // 2. Перерисовка положения агента:
+                    // 2. Обработка шага в клетку:
+                    SetLocationByStep(result, _shipList[i]);
 
+                    // 3. Обновление направления движения:
+                    _shipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(_shipList[i].Location, _shipList[i].PrevPosition);
 
-                    // 3. Перерисовка направления движения:
-
-
-                    // 4. Обработка смерти корабля, при совпадении ячеек:
+                    // 3. Обработка смерти корабля, при совпадении ячеек:
 
                 }
 
@@ -93,6 +98,75 @@ namespace MultiAgentSystem.ViewModels
             }
 
             return depths;
+        }
+
+        private void SetLocationByStep(double[] netResult, ShipAgent ship)
+        {
+            ship.PrevPosition = ship.Location;
+
+            int maxNetResultIndex = GetMaxResultIndex(netResult);
+
+            switch(ship.MoveDirection)
+            {
+                case Direction.NW:
+                    if (maxNetResultIndex == 0) { ship.Location.X -= 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.X -= 1; ship.Location.Y -= 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.Y -= 1; }
+                    break;
+                case Direction.W:
+                    if (maxNetResultIndex == 0) { ship.Location.X -= 1; ship.Location.Y += 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.X -= 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.X -= 1; ship.Location.Y -= 1; }
+                    break;
+                case Direction.SW:
+                    if (maxNetResultIndex == 0) { ship.Location.Y += 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.X -= 1; ship.Location.Y += 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.X -= 1; }
+                    break;
+                case Direction.S:
+                    if (maxNetResultIndex == 0) { ship.Location.X += 1; ship.Location.Y += 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.Y += 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.X -= 1; ship.Location.Y += 1; }
+                    break;
+                case Direction.SE:
+                    if (maxNetResultIndex == 0) { ship.Location.X += 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.X += 1; ship.Location.Y += 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.Y += 1; }
+                    break;
+                case Direction.E:
+                    if (maxNetResultIndex == 0) { ship.Location.X += 1; ship.Location.Y -= 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.X += 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.X += 1; ship.Location.Y += 1; }
+                    break;
+                case Direction.NE:
+                    if (maxNetResultIndex == 0) { ship.Location.Y -= 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.X += 1; ship.Location.Y -= 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.X += 1; }
+                    break;
+                case Direction.N:
+                default:
+                    if (maxNetResultIndex == 0) { ship.Location.X -= 1; ship.Location.Y -= 1; }
+                    if (maxNetResultIndex == 1) { ship.Location.Y -= 1; }
+                    if (maxNetResultIndex == 2) { ship.Location.X += 1; ship.Location.Y -= 1; }
+                    break;
+            }
+        }
+
+        private int GetMaxResultIndex(double[] result)
+        {
+            int maxIndex = 0;
+            double maxValue = result[maxIndex];
+
+            for(int i = 0; i < result.Length; i++)
+            {
+                if(result[i] > maxValue)
+                {
+                    maxValue = result[i];
+                    maxIndex = i;
+                }
+            }
+
+            return maxIndex;
         }
     }
 }
