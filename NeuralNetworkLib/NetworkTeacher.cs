@@ -211,6 +211,7 @@ namespace NeuralNetworkLib
 
         public double[] HandleByNet(double[] data)
         {
+            _network.Teach(new double[] { 0, 20, 50 }, new double[] { 0, 0, 1 }, 0.00000000000001);
             return _network.Handle(data);
         }
     }
