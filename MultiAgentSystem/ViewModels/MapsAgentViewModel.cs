@@ -58,8 +58,7 @@ namespace MultiAgentSystem.ViewModels
         {
 
         }
-
-        
+      
         //public override void Reflection(object obj)
         //{
           

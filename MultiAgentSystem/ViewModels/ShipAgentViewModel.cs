@@ -47,33 +47,14 @@ namespace MultiAgentSystem.ViewModels
                 }
             }
 
-            // 4. Обработка смерти корабля:
-            for (int k = 0; k < ShipList.Count; k++)
-            {
-                for (int j = 0; j < ShipList.Count; j++)
-                {
-                    if (ShipList[k].Location.X == ShipList[j].Location.X &&
-                        ShipList[k].Location.Y == ShipList[j].Location.Y && k != j)
-                    {
-                        ShipList.Remove(ShipList[k]);
+            // 5. Обработка столкновения корабля:
+            HandleShipCrushing(targetList);
 
-                        k--;
-                    }
-                }
-            }
+            // 5. Обработка кораблей, севших на мель:
+            HandleStoppedShips();
 
-            // 5. Обработка нахождения цели:
-            for (int i = 0; i < ShipList.Count; i++)
-            {
-                for (int k = 0; k < ShipList.Count; k++)
-                {
-                    if(ShipList[i].Location.X == targetList[k].Location.X &&
-                       ShipList[i].Location.Y == targetList[k].Location.Y)
-                    {
-                        ShipList[i].Speed = 0;
-                    }
-                }
-            }
+            // 6. Обработка нахождения цели:
+            HandleSuccessfulShips(targetList);
         }
 
         private double[] GetSurroundingDepths(Position shipPosition, Direction moveDirection)
@@ -202,6 +183,53 @@ namespace MultiAgentSystem.ViewModels
             }
 
             return maxIndex;
+        }
+
+        private void HandleShipCrushing(List<TargetAgent> targetList)
+        {
+            for (int k = 0; k < ShipList.Count; k++)
+            {
+                for (int j = 0; j < ShipList.Count; j++)
+                {
+                    if (ShipList[k].Location.X == ShipList[j].Location.X &&
+                        ShipList[k].Location.Y == ShipList[j].Location.Y && k != j)
+                    {
+                        ShipList.Remove(ShipList[k]);
+                        targetList.RemoveAt(k);
+
+                        k--;
+                    }
+                }
+            }
+        }
+
+        private void HandleStoppedShips()
+        {
+            for (int k = 0; k < ShipList.Count; k++)
+            {
+                for (int j = 0; j < ShipList.Count; j++)
+                {
+                    if (_depthsMap[ShipList[k].Location.Y, ShipList[k].Location.X] < 0)
+                    {
+                        ShipList[k].Speed = 0;
+                    }
+                }
+            }
+        }
+
+        private void HandleSuccessfulShips(List<TargetAgent> targetList)
+        {
+            for (int i = 0; i < ShipList.Count; i++)
+            {
+                for (int k = 0; k < ShipList.Count; k++)
+                {
+                    if (ShipList[i].Location.X == targetList[k].Location.X &&
+                       ShipList[i].Location.Y == targetList[k].Location.Y)
+                    {
+                        ShipList[i].Speed = 0;
+                    }
+                }
+            }
         }
     }
 }
