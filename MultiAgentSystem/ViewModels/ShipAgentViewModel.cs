@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MultiAgentSystem.Model;
 using MultiAgentSystem.ServiceManager;
 using NeuralNetworkLib;
@@ -35,7 +36,7 @@ namespace MultiAgentSystem.ViewModels
                     var result = _serviceNetwork.Handle(GetSurroundingDepths(ShipList[i].Location, ShipList[i].DirectionToTarget));
 
                     // 2. Обработка шага в клетку:
-                    SetLocationByStep(result, ShipList[i]);
+                    SetLocationByStep(result, ShipList[i], targetList[i]);
 
                     // 3. Обновление текущего направления движения:
                     ShipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(ShipList[i].Location, ShipList[i].PrevPosition);
@@ -109,62 +110,69 @@ namespace MultiAgentSystem.ViewModels
             return depths;
         }
 
-        private void SetLocationByStep(double[] netResult, ShipAgent ship)
+        private void SetLocationByStep(double[] netResult, ShipAgent ship, TargetAgent target)
         {
-            ship.PrevPosition = new Position() { X = ship.Location.X, Y = ship.Location.Y };
-
-            int maxNetResultIndex = GetMaxResultIndex(netResult);
-
-            switch(ship.DirectionToTarget)
+            if(Math.Abs(ship.Location.X - target.Location.X) == 1 && Math.Abs(ship.Location.Y - target.Location.Y) == 1)
             {
-                case Direction.NW:
-                    if (maxNetResultIndex == 0) { ship.Location.X -= 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.X -= 1; ship.Location.Y -= 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.Y -= 1; }
-                    break;
-                case Direction.W:
-                    if (maxNetResultIndex == 0) { ship.Location.X -= 1; ship.Location.Y += 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.X -= 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.X -= 1; ship.Location.Y -= 1; }
-                    break;
-                case Direction.SW:
-                    if (maxNetResultIndex == 0) { ship.Location.Y += 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.X -= 1; ship.Location.Y += 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.X -= 1; }
-                    break;
-                case Direction.S:
-                    if (maxNetResultIndex == 0) { ship.Location.X += 1; ship.Location.Y += 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.Y += 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.X -= 1; ship.Location.Y += 1; }
-                    break;
-                case Direction.SE:
-                    if (maxNetResultIndex == 0) { ship.Location.X += 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.X += 1; ship.Location.Y += 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.Y += 1; }
-                    break;
-                case Direction.E:
-                    if (maxNetResultIndex == 0) { ship.Location.X += 1; ship.Location.Y -= 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.X += 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.X += 1; ship.Location.Y += 1; }
-                    break;
-                case Direction.NE:
-                    if (maxNetResultIndex == 0) { ship.Location.Y -= 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.X += 1; ship.Location.Y -= 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.X += 1; }
-                    break;
-                case Direction.N:
-                default:
-                    if (maxNetResultIndex == 0) { ship.Location.X -= 1; ship.Location.Y -= 1; }
-                    if (maxNetResultIndex == 1) { ship.Location.Y -= 1; }
-                    if (maxNetResultIndex == 2) { ship.Location.X += 1; ship.Location.Y -= 1; }
-                    break;
+                ship.Location = target.Location;
             }
-
-            if(_depthsMap.GetLength(0) <= ship.Location.Y ||
-               _depthsMap.GetLength(1) <= ship.Location.X ||
-               ship.Location.X < 0 || ship.Location.Y < 0)
+            else
             {
-                ship.Location = new Position() { X = ship.PrevPosition.X, Y = ship.PrevPosition.Y };
+                ship.PrevPosition = new Position() { X = ship.Location.X, Y = ship.Location.Y };
+
+                int maxNetResultIndex = GetMaxResultIndex(netResult);
+
+                switch (ship.DirectionToTarget)
+                {
+                    case Direction.NW:
+                        if (maxNetResultIndex == 0) { ship.Location.X -= 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.X -= 1; ship.Location.Y -= 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.Y -= 1; }
+                        break;
+                    case Direction.W:
+                        if (maxNetResultIndex == 0) { ship.Location.X -= 1; ship.Location.Y += 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.X -= 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.X -= 1; ship.Location.Y -= 1; }
+                        break;
+                    case Direction.SW:
+                        if (maxNetResultIndex == 0) { ship.Location.Y += 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.X -= 1; ship.Location.Y += 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.X -= 1; }
+                        break;
+                    case Direction.S:
+                        if (maxNetResultIndex == 0) { ship.Location.X += 1; ship.Location.Y += 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.Y += 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.X -= 1; ship.Location.Y += 1; }
+                        break;
+                    case Direction.SE:
+                        if (maxNetResultIndex == 0) { ship.Location.X += 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.X += 1; ship.Location.Y += 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.Y += 1; }
+                        break;
+                    case Direction.E:
+                        if (maxNetResultIndex == 0) { ship.Location.X += 1; ship.Location.Y -= 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.X += 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.X += 1; ship.Location.Y += 1; }
+                        break;
+                    case Direction.NE:
+                        if (maxNetResultIndex == 0) { ship.Location.Y -= 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.X += 1; ship.Location.Y -= 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.X += 1; }
+                        break;
+                    case Direction.N:
+                    default:
+                        if (maxNetResultIndex == 0) { ship.Location.X -= 1; ship.Location.Y -= 1; }
+                        if (maxNetResultIndex == 1) { ship.Location.Y -= 1; }
+                        if (maxNetResultIndex == 2) { ship.Location.X += 1; ship.Location.Y -= 1; }
+                        break;
+                }
+
+                if (_depthsMap.GetLength(0) <= ship.Location.Y ||
+                   _depthsMap.GetLength(1) <= ship.Location.X ||
+                   ship.Location.X < 0 || ship.Location.Y < 0)
+                {
+                    ship.Location = new Position() { X = ship.PrevPosition.X, Y = ship.PrevPosition.Y };
+                }
             }
         }
 
