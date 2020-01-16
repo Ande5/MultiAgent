@@ -24,9 +24,9 @@ namespace MultiAgentSystem.ServiceManager
             {
                 var shipAgent = new ShipAgent
                 {
-                    Speed = random.Next(8, 9),
+                    Speed = random.Next(10, 15),
                     Draft = random.Next(5, 35),
-                    MaxSpeed = random.Next(9, 10),
+                    MaxSpeed = random.Next(14, 15),
                   
                     Location = new Position
                     {
@@ -37,7 +37,7 @@ namespace MultiAgentSystem.ServiceManager
 
                 shipAgent.MoveDirection =
                     directionManager.InitializeDirection(shipAgent.Location, targetAgents[i].Location);
-                shipAgent.CurrentAwaitIteration = 10 - shipAgent.Speed;
+                shipAgent.CurrentAwaitIteration = 20 - shipAgent.Speed;
 
                 CheckLocationShip(gridX, gridY, ref shipAgent);
                 CheckLocationShipByTarget(gridX, gridY, targetAgents, directionManager, ref shipAgent);

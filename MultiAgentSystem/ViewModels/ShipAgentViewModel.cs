@@ -39,12 +39,16 @@ namespace MultiAgentSystem.ViewModels
                     SetLocationByStep(result, ShipList[i], targetList[i]);
 
                     // 3. Обновление текущего направления движения:
-                    ShipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(ShipList[i].Location, ShipList[i].PrevPosition);
+                    try
+                    {
+                        ShipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(ShipList[i].Location, ShipList[i].PrevPosition);
+                    }
+                    catch { }
 
                     // 4. Обновление направления движения к цели:
                     ShipList[i].DirectionToTarget = _directionManager.InitializeDirection(ShipList[i].Location, targetList[i].Location);
 
-                    ShipList[i].CurrentAwaitIteration = 10 - ShipList[i].Speed;
+                    ShipList[i].CurrentAwaitIteration = 15 - ShipList[i].Speed;
                 }
             }
 
@@ -112,7 +116,7 @@ namespace MultiAgentSystem.ViewModels
 
         private void SetLocationByStep(double[] netResult, ShipAgent ship, TargetAgent target)
         {
-            if(Math.Abs(ship.Location.X - target.Location.X) == 1 && Math.Abs(ship.Location.Y - target.Location.Y) == 1)
+            if(Math.Abs(ship.Location.X - target.Location.X) <= 1 && Math.Abs(ship.Location.Y - target.Location.Y) <= 1)
             {
                 ship.Location = target.Location;
             }
@@ -203,7 +207,7 @@ namespace MultiAgentSystem.ViewModels
                         ShipList[k].Location.Y == ShipList[j].Location.Y && k != j)
                     {
                         ShipList.Remove(ShipList[k]);
-                        targetList.RemoveAt(k);
+                        //targetList.RemoveAt(k);
 
                         k--;
                         break;
@@ -216,12 +220,9 @@ namespace MultiAgentSystem.ViewModels
         {
             for (int k = 0; k < ShipList.Count; k++)
             {
-                for (int j = 0; j < ShipList.Count; j++)
+                if (_depthsMap[ShipList[k].Location.Y, ShipList[k].Location.X] < 0)
                 {
-                    if (_depthsMap[ShipList[k].Location.Y, ShipList[k].Location.X] < 0)
-                    {
-                        ShipList[k].Speed = 0;
-                    }
+                    ShipList[k].Speed = 0;
                 }
             }
         }
