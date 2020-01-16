@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\Command.cs" />
     <Compile Include="Model\Direction.cs" />
+    <Compile Include="Model\TargetAgent.cs" />
     <Compile Include="ServiceManager\FileManager.cs" />
     <Compile Include="ServiceManager\GenerationAgents.cs" />
     <Compile Include="ViewModels\BaseAgentViewModel.cs" />
