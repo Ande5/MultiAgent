@@ -29,45 +29,41 @@ namespace MultiAgentSystem.ViewModels
             {
                 ShipList[i].CurrentAwaitIteration--;
 
-                if (ShipList[i].CurrentAwaitIteration == 0)
+                if (ShipList[i].CurrentAwaitIteration == 0 && ShipList[i].Speed != 0)
                 {
                     // 1. Получение ответа от нейросети о следующем шаге:
-                    var result = _serviceNetwork.Handle(GetSurroundingDepths(ShipList[i].Location, ShipList[i].MoveDirection));
+                    var result = _serviceNetwork.Handle(GetSurroundingDepths(ShipList[i].Location, ShipList[i].DirectionToTarget));
 
                     // 2. Обработка шага в клетку:
                     SetLocationByStep(result, ShipList[i]);
 
-                    // 3. Обновление направления движения:
+                    // 3. Обновление текущего направления движения:
                     ShipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(ShipList[i].Location, ShipList[i].PrevPosition);
 
-                    if(ShipList[i].Speed != 0)
-                    {
-                        ShipList[i].CurrentAwaitIteration = 10 - ShipList[i].Speed;
-                    }
+                    // 4. Обновление направления движения к цели:
+                    ShipList[i].DirectionToTarget = _directionManager.InitializeDirection(ShipList[i].Location, targetList[i].Location);
+
+                    ShipList[i].CurrentAwaitIteration = 10 - ShipList[i].Speed;
                 }
             }
 
             // 4. Обработка смерти корабля:
-            //try
-            //{
-                for (int k = 0; k < ShipList.Count; k++)
+            for (int k = 0; k < ShipList.Count; k++)
+            {
+                for (int j = 0; j < ShipList.Count; j++)
                 {
-                    for (int j = 0; j < ShipList.Count; j++)
+                    if (ShipList[k].Location.X == ShipList[j].Location.X &&
+                        ShipList[k].Location.Y == ShipList[j].Location.Y && k != j)
                     {
-                        if (ShipList[k].Location.X == ShipList[j].Location.X &&
-                            ShipList[k].Location.Y == ShipList[j].Location.Y && k !=j)
-                        {
-                            ShipList.Remove(ShipList[k]);
-                           
-                            k--;
-                        }
+                        ShipList.Remove(ShipList[k]);
+
+                        k--;
                     }
                 }
-            //}
-            //catch { }
+            }
 
             // 5. Обработка нахождения цели:
-            for(int i = 0; i < ShipList.Count; i++)
+            for (int i = 0; i < ShipList.Count; i++)
             {
                 for (int k = 0; k < ShipList.Count; k++)
                 {
@@ -138,7 +134,7 @@ namespace MultiAgentSystem.ViewModels
 
             int maxNetResultIndex = GetMaxResultIndex(netResult);
 
-            switch(ship.MoveDirection)
+            switch(ship.DirectionToTarget)
             {
                 case Direction.NW:
                     if (maxNetResultIndex == 0) { ship.Location.X -= 1; }
@@ -181,6 +177,13 @@ namespace MultiAgentSystem.ViewModels
                     if (maxNetResultIndex == 1) { ship.Location.Y -= 1; }
                     if (maxNetResultIndex == 2) { ship.Location.X += 1; ship.Location.Y -= 1; }
                     break;
+            }
+
+            if(_depthsMap.GetLength(0) <= ship.Location.Y ||
+               _depthsMap.GetLength(1) <= ship.Location.X ||
+               ship.Location.X < 0 || ship.Location.Y < 0)
+            {
+                ship.Location = new Position() { X = ship.PrevPosition.X, Y = ship.PrevPosition.Y };
             }
         }
 

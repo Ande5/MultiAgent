@@ -25,7 +25,7 @@ namespace MultiAgentSystem.Views
             Map.Content = LoadGrid();
             var timer = new DispatcherTimer();
             timer.Tick += new EventHandler(Reflection);
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 50);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             timer.Start();
             // _viewModel.OnSelect += UpdateMapContent;
         }
