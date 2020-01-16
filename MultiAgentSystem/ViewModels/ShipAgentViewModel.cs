@@ -39,13 +39,28 @@ namespace MultiAgentSystem.ViewModels
 
                     // 3. Обновление направления движения:
                     _shipList[i].MoveDirection = _directionManager.UpdateDirectionAfterStep(_shipList[i].Location, _shipList[i].PrevPosition);
-
-                    // 3. Обработка смерти корабля, при совпадении ячеек:
-
                 }
 
                 _shipList[i].CurrentAwaitIteration = 10 - _shipList[i].Speed;
             }
+
+            // 4. Обработка смерти корабля:
+            //try
+            //{
+                for (int k = 0; k < _shipList.Count; k++)
+                {
+                    for (int j = 0; j < _shipList.Count; j++)
+                    {
+                        if (_shipList[k].Location.X == _shipList[j].Location.X &&
+                            _shipList[k].Location.Y == _shipList[j].Location.Y)
+                        {
+                            _shipList.Remove(_shipList[k]);
+                            k--;
+                        }
+                    }
+                }
+            //}
+            //catch { }
         }
 
         private double[] GetSurroundingDepths(Position shipPosition, Direction moveDirection)
